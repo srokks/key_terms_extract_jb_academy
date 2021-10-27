@@ -1,6 +1,7 @@
 # Write your code here
 import string
 
+import nltk
 from lxml import etree
 from nltk import word_tokenize
 from nltk.corpus import stopwords
@@ -40,6 +41,15 @@ def remove_not_words(words_dict):
         temp_list = [item for item in words_dict[head]['lemms'] if item not in not_allowed_list]
         words_dict[head]['lemms'] = temp_list
 
+def most_freq_nn(words_dict):
+
+    for head in words_dict:
+        temp_list = []
+        for item in words_dict[head]['lemms']:
+            if nltk.pos_tag([item])[0][1] == 'NN':
+                temp_list.append(item)
+        words_dict[head]['lemms'] = temp_list
+    most_freq(words_dict)
 def most_freq(words_dict):
     for head in words_dict:
         words_dict[head].update({'most_freq':Counter(words_dict[head]['lemms']).most_common(5)})
@@ -57,6 +67,6 @@ parsed_text_dict = parse_from_xml()
 tokenize(parsed_text_dict)
 lemmatize(parsed_text_dict)
 remove_not_words(parsed_text_dict)
-most_freq(parsed_text_dict)
+most_freq_nn(parsed_text_dict)
 print_most_frex_words(parsed_text_dict)
 pass
