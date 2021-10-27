@@ -23,9 +23,25 @@ def gen_most_freq_words(parsed_text_dict):
         tokens = gen_tokens(tail)
         parsed_text_dict[head] = Counter(tokens).most_common(5)
 
-
-def print_most_frex_words(parsed_text_dict):
-    for head, tail in parsed_text_dict.items():
+def tokenize(words_dict):
+    for head in words_dict:
+        words_dict[head].update({'tokens':word_tokenize(words_dict[head]['tail'])})
+def lemmatize(words_dict):
+    lemm = WordNetLemmatizer()
+    for head in words_dict:
+        words_dict[head].update({'lemms':[lemm.lemmatize(x) for x  in words_dict[head]['tokens']]})
+def remove_not_words(words_dict):
+    not_allowed_list = stopwords.words('english')
+    not_allowed_list.extend(string.punctuation)
+    for head in words_dict:
+        temp_list = [item for item in words_dict[head]['lemms'] if item not in not_allowed_list]
+        words_dict[head]['lemms'] = temp_list
+    # print(stopwords.words('english'))
+    # print(list(string.punctuation))
+    #removes punctuations
+    #print([item for item in a if item not in list(string.punctuation)])
+def print_most_frex_words(words_dict):
+    for head in words_dict:
         print(f'{head}:')
         # print(tail)
         print(' '.join(([x for x,y in tail])))
