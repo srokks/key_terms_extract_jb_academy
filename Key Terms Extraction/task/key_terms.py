@@ -12,7 +12,7 @@ def parse_from_xml():
                 head = elle.text
             if elle.get('name') == 'text':
                 tail = elle.text
-        parsed_text_dict.update({head: tail})
+        parsed_text_dict.update({head:{'tail':tail}})
     return parsed_text_dict
 
 def gen_tokens(text):
@@ -43,14 +43,16 @@ def remove_not_words(words_dict):
 def print_most_frex_words(words_dict):
     for head in words_dict:
         print(f'{head}:')
-        # print(tail)
-        print(' '.join(([x for x,y in tail])))
+        print(words_dict[head]['lemms'])
+        # print(' '.join(([x for x,y in tail])))
         # print(sorted(tail.items(),key= lambda item: item[1],reverse=True))
         # for el in tail[]:
         #     print(el)
 
 # counter = Counter(gen_tokens(test_txt))
 parsed_text_dict = parse_from_xml()
-gen_most_freq_words(parsed_text_dict)
-
+tokenize(parsed_text_dict)
+lemmatize(parsed_text_dict)
+remove_not_words(parsed_text_dict)
 print_most_frex_words(parsed_text_dict)
+pass
